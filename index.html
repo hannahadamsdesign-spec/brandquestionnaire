@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Discovery Questionnaire — Hannah Adams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #0d0d0d;
+    --surface-hover: #151515;
+    --border: #222222;
+    --border-focus: #4a8eda;
+    --text: #f0eef5;
+    --text-muted: #b8b5c6;
+    --text-dim: #7d7a8e;
+    --accent: #4a8eda;
+    --accent-soft: rgba(74, 142, 218, 0.12);
+    --accent-glow: rgba(74, 142, 218, 0.25);
+    --serif: 'Raleway', -apple-system, sans-serif;
+    --sans: 'Raleway', -apple-system, sans-serif;
+    --radius: 8px;
+    --max-w: 960px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.65; min-height: 100vh; letter-spacing: 0.015em; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(74, 142, 218, 0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 90%, rgba(60, 120, 200, 0.04), transparent 50%); pointer-events: none; z-index: 0; }
+  .wrapper { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  .header { margin-bottom: 3.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+  .header__eyebrow { font-family: var(--sans); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .header__title { font-family: var(--serif); font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 400; line-height: 1.15; color: var(--text); margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; white-space: nowrap; }
+  .header__subtitle { font-size: 1.05rem; font-weight: 400; color: var(--text); max-width: 600px; line-height: 1.7; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+  .header__note { margin-top: 1.5rem; font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+  .form-section { margin-bottom: 3rem; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .form-section.visible { opacity: 1; transform: translateY(0); }
+  .section-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; margin-bottom: 0.25rem; color: var(--accent); position: relative; }
+  .section-title::before { display: none; }
+  .section-number { font-family: var(--sans); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+  .question { margin-bottom: 2rem; padding: 1.5rem; background: transparent; border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+  .question:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .question__label { display: block; font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; line-height: 1.5; }
+  .question__hint { font-size: 1.05rem; font-weight: 400; color: var(--text-muted); margin-bottom: 0.85rem; line-height: 1.65; }
+  .question__number { font-size: 0.75rem; font-weight: 600; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  textarea, input[type="text"], input[type="email"], input[type="url"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--sans); font-size: 0.95rem; font-weight: 400; padding: 0.75rem 1rem; transition: border-color 0.2s ease, box-shadow 0.2s ease; line-height: 1.6; resize: vertical; }
+  textarea:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px var(--accent-soft); }
+  textarea::placeholder, input::placeholder { color: var(--text-dim); font-weight: 400; }
+  textarea { min-height: 100px; } textarea.tall { min-height: 140px; }
+  .spectrum { margin-bottom: 1rem; }
+  .spectrum__row { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.6rem; }
+  .spectrum__label { font-size: 0.82rem; font-weight: 500; color: var(--text-muted); min-width: 90px; text-align: right; }
+  .spectrum__label--right { text-align: left; }
+  input[type="range"] { flex: 1; -webkit-appearance: none; appearance: none; height: 4px; background: var(--border); border-radius: 2px; outline: none; }
+  input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 0 0 2px var(--accent-soft); transition: box-shadow 0.2s ease; }
+  input[type="range"]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 4px var(--accent-glow); }
+  input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--accent); cursor: pointer; border: 2px solid var(--bg); }
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .check-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.65rem; border-radius: 6px; cursor: pointer; transition: background 0.2s ease; }
+  .check-item:hover { background: var(--surface-hover); }
+  .check-item input[type="checkbox"] { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 4px; background: var(--bg); cursor: pointer; flex-shrink: 0; transition: all 0.2s ease; position: relative; }
+  .check-item input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+  .check-item input[type="checkbox"]:checked::after { content: ''; position: absolute; top: 2px; left: 5px; width: 5px; height: 9px; border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .check-item span { font-size: 0.9rem; font-weight: 400; color: var(--text-muted); }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 100; transition: width 0.3s ease; box-shadow: 0 0 8px var(--accent-glow); }
+  .submit-area { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; }
+  .submit-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: #fff; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.03em; padding: 0.9rem 2.5rem; border: none; border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+  .submit-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.3s ease; }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+  .submit-btn:hover::before { opacity: 1; }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note { margin-top: 1rem; font-size: 0.82rem; color: var(--text-dim); }
+  .success-message { display: none; text-align: center; padding: 4rem 2rem; }
+  .success-message.show { display: block; }
+  .success-message h2 { font-family: var(--serif); font-size: 2rem; color: var(--text); margin-bottom: 1rem; }
+  .success-message p { color: var(--text-muted); font-weight: 400; max-width: 400px; margin: 0 auto; }
+  .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.82rem; color: var(--text-dim); }
+  .footer a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer a:hover { color: var(--accent); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 860px) { .wrapper { padding: 3rem 1.25rem 5rem; } }
+  @media (max-width: 600px) { .wrapper { padding: 2rem 1rem 3.5rem; } .header__title { font-size: 1.8rem; white-space: normal; } .checklist { grid-template-columns: 1fr; } .spectrum__label { min-width: 70px; font-size: 0.7rem; } .question { padding: 1.25rem; } .section-title { font-size: 1.35rem; } .submit-btn { width: 100%; justify-content: center; } }
+  @media (max-width: 380px) { .wrapper { padding: 1.5rem 0.75rem 3rem; } .spectrum__row { gap: 0.4rem; } .spectrum__label { min-width: 58px; font-size: 0.65rem; } }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="wrapper">
+  <header class="header">
+    <div class="header__eyebrow">Hannah Adams — Creative Direction</div>
+    <h1 class="header__title">Brand Discovery Questionnaire</h1>
+    <p class="header__subtitle">A comprehensive intake for brand identity, messaging, and creative direction. Your insights here will directly shape the work — every detail helps.</p>
+    <p class="header__note">Don't worry about getting the language "perfect" — these responses are a starting point for collaboration, not a final draft. If a question doesn't apply, just skip it.</p>
+  </header>
+  <form id="brandForm" action="https://formspree.io/f/xkovoakr" method="POST">
+    <div class="form-section" data-section><div class="section-number">Section 01</div><h2 class="section-title">Organization & Context</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">01</div><label class="question__label">What does your organization do?</label><p class="question__hint">Describe what you do in one to two sentences, as if explaining to someone outside your industry.</p><textarea name="01_organization_description" placeholder="We..."></textarea></div>
+      <div class="question"><div class="question__number">02</div><label class="question__label">What is your mission?</label><p class="question__hint">Not just a formal statement — what drives the work? What would be different in the world if you fully succeed?</p><textarea name="02_mission" placeholder="Our mission is..."></textarea></div>
+      <div class="question"><div class="question__number">03</div><label class="question__label">How long have you been operating, and where are you now?</label><p class="question__hint">Stage of business, team size and structure, key milestones or recent changes.</p><textarea name="03_stage" placeholder="We've been..."></textarea></div>
+      <div class="question"><div class="question__number">04</div><label class="question__label">What is your primary product or service?</label><p class="question__hint">What can someone actually use, buy, or engage with today? If still in development, describe what exists now versus what's on the roadmap.</p><textarea name="04_product" placeholder="Our primary offering is..."></textarea></div>
+      <div class="question"><div class="question__number">05</div><label class="question__label">What is the simplest example of your product or service in action?</label><p class="question__hint">Something a non-expert could understand. A real scenario, even if small.</p><textarea name="05_example" placeholder="The simplest example would be..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 02</div><h2 class="section-title">Audience & Market</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">06</div><label class="question__label">Who is your primary audience?</label><p class="question__hint">Be as specific as possible — demographics (age, role, industry, geography), psychographics (values, pain points, aspirations), and where they spend time.</p><textarea name="06_primary_audience" class="tall" placeholder="Our primary audience is..."></textarea></div>
+      <div class="question"><div class="question__number">07</div><label class="question__label">Do you have secondary audiences?</label><p class="question__hint">Investors, partners, press, internal teams, regulators, the general public? List them in order of priority.</p><textarea name="07_secondary_audience" placeholder="Secondary audiences include..."></textarea></div>
+      <div class="question"><div class="question__number">08</div><label class="question__label">What do your audiences currently think about you?</label><p class="question__hint">If they've heard of you at all — what's the perception? What's the biggest misconception?</p><textarea name="08_perception" placeholder="People currently think..."></textarea></div>
+      <div class="question"><div class="question__number">09</div><label class="question__label">Who are your competitors or closest comparisons?</label><p class="question__hint">Who else does your audience consider? What makes you different? Are there comparisons you want to avoid?</p><textarea name="09_competitors" placeholder="The closest comparisons would be..."></textarea></div>
+      <div class="question"><div class="question__number">10</div><label class="question__label">What are 3–5 key distinctions about your organization?</label><p class="question__hint">What makes you meaningfully different? These will drive design choices that reinforce your strengths.</p><textarea name="10_distinctions" placeholder="Key distinctions include..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 03</div><h2 class="section-title">Brand Identity & Personality</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">11</div><label class="question__label">If your brand were a person, how would you describe their personality?</label><p class="question__hint">Use adjectives, archetypes, or comparisons. For example: "Calm authority, like a trusted advisor who speaks plainly."</p><textarea name="11_brand_personality" placeholder="Our brand feels like..."></textarea></div>
+      <div class="question"><div class="question__number">12</div><label class="question__label">What is the first impression you want people to have?</label><p class="question__hint">When someone encounters your brand for the first time — on a website, in a pitch, on social media — what should they feel or think?</p><textarea name="12_first_impression" placeholder="We want people to feel..."></textarea></div>
+      <div class="question"><div class="question__number">13</div><label class="question__label">What tone should your communications have?</label><p class="question__hint">Slide each scale to where it feels right.</p>
+        <div class="spectrum">
+          <div class="spectrum__row"><span class="spectrum__label">Formal</span><input type="range" min="1" max="5" value="3" name="13_tone_formality"><span class="spectrum__label spectrum__label--right">Casual</span></div>
+          <div class="spectrum__row"><span class="spectrum__label">Technical</span><input type="range" min="1" max="5" value="3" name="13_tone_technical"><span class="spectrum__label spectrum__label--right">Plain-language</span></div>
+          <div class="spectrum__row"><span class="spectrum__label">Conservative</span><input type="range" min="1" max="5" value="3" name="13_tone_boldness"><span class="spectrum__label spectrum__label--right">Bold</span></div>
+          <div class="spectrum__row"><span class="spectrum__label">Serious</span><input type="range" min="1" max="5" value="3" name="13_tone_playfulness"><span class="spectrum__label spectrum__label--right">Playful</span></div>
+          <div class="spectrum__row"><span class="spectrum__label">Authoritative</span><input type="range" min="1" max="5" value="3" name="13_tone_approachability"><span class="spectrum__label spectrum__label--right">Approachable</span></div>
+        </div>
+      </div>
+      <div class="question"><div class="question__number">14</div><label class="question__label">Are there words, phrases, or themes you want to avoid?</label><p class="question__hint">Industry jargon that's overused? Language that gives the wrong impression? Regulatory red lines?</p><textarea name="14_avoid_words" placeholder="We'd like to avoid..."></textarea></div>
+      <div class="question"><div class="question__number">15</div><label class="question__label">Do you have an existing tagline, slogan, or positioning statement?</label><p class="question__hint">If so, is it approved for use? Are there alternatives being considered?</p><textarea name="15_tagline" placeholder="Our current tagline is..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 04</div><h2 class="section-title">Visual Direction & Existing Assets</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">16</div><label class="question__label">Do you have existing brand assets?</label><p class="question__hint">Check all that apply.</p>
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="logo"><span>Logo(s)</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="colors"><span>Color palette</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="typography"><span>Typography / fonts</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="guidelines"><span>Brand guidelines</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="decks"><span>Pitch decks</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="photo_video"><span>Photography / video</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="whitepapers"><span>White papers / case studies</span></label>
+          <label class="check-item"><input type="checkbox" name="16_assets[]" value="social"><span>Social media presence</span></label>
+        </div>
+      </div>
+      <div class="question"><div class="question__number">17</div><label class="question__label">Share 3–5 examples of brands, websites, or visual styles you admire.</label><p class="question__hint">What attracts you about them — the feel, the clarity, the sophistication, the energy? Include links if possible.</p><textarea name="17_visual_references" class="tall" placeholder="Brands / sites I admire and why..."></textarea></div>
+      <div class="question"><div class="question__number">18</div><label class="question__label">Are there visual styles or trends you actively dislike?</label><p class="question__hint">Knowing what to avoid is as useful as knowing what to aim for.</p><textarea name="18_visual_dislikes" placeholder="I'd rather avoid..."></textarea></div>
+      <div class="question"><div class="question__number">19</div><label class="question__label">What has worked well in the past? What hasn't?</label><p class="question__hint">If you've done branding or creative work before — what resonated? What fell flat? If you haven't, just skip this.</p><textarea name="19_past_experience" placeholder="In the past..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 05</div><h2 class="section-title">Project Specifics</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">20</div><label class="question__label">What is the primary deliverable for this project?</label><p class="question__hint">Full brand identity, website, marketing collateral, animation, illustration — or a combination?</p><textarea name="20_deliverable" placeholder="We're looking for..."></textarea></div>
+      <div class="question"><div class="question__number">21</div><label class="question__label">What is the primary goal of this project?</label><p class="question__hint">Educate? Attract customers? Support fundraising? Launch something new? What does success look like?</p><textarea name="21_goal" placeholder="The main goal is..."></textarea></div>
+      <div class="question"><div class="question__number">22</div><label class="question__label">Who is the specific audience for this piece?</label><p class="question__hint">This may differ from your overall audience. A pitch deck targets investors; a website targets customers.</p><textarea name="22_piece_audience" placeholder="This specific piece is for..."></textarea></div>
+      <div class="question"><div class="question__number">23</div><label class="question__label">What action should the audience take after engaging with this?</label><p class="question__hint">Visit a website? Contact sales? Sign up? Download something?</p><textarea name="23_cta" placeholder="After seeing this, they should..."></textarea></div>
+      <div class="question"><div class="question__number">24</div><label class="question__label">What is the budget range for this project?</label><p class="question__hint">A rough range helps define scope and deliverables. Exact numbers aren't necessary at this stage.</p><textarea name="24_budget" placeholder="Our budget range is approximately..."></textarea></div>
+      <div class="question"><div class="question__number">25</div><label class="question__label">What is the desired timeline?</label><p class="question__hint">Is there a hard deadline (event, launch, funding round)? Or is this flexible?</p><textarea name="25_timeline" placeholder="Ideally we'd like this completed by..."></textarea></div>
+      <div class="question"><div class="question__number">26</div><label class="question__label">Are there mandatory elements that must be included?</label><p class="question__hint">Specific features, partner mentions, team introductions, legal disclaimers?</p><textarea name="26_mandatory" placeholder="Must-haves include..."></textarea></div>
+      <div class="question"><div class="question__number">27</div><label class="question__label">Who are the decision-makers and collaborators?</label><p class="question__hint">Who has final approval? Who provides feedback? Are other agencies or internal teams contributing?</p><textarea name="27_stakeholders" placeholder="Key decision-makers are..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 06</div><h2 class="section-title">Legal & Compliance</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">28</div><label class="question__label">Are there claims you cannot make in public materials?</label><p class="question__hint">Performance guarantees? Security certifications? Health or financial claims? Skip if not applicable.</p><textarea name="28_restricted_claims" placeholder="We cannot claim..."></textarea></div>
+      <div class="question"><div class="question__number">29</div><label class="question__label">Are there required disclaimers?</label><p class="question__hint">Legal fine print, regulatory notices, copyright attributions, or partner usage agreements?</p><textarea name="29_disclaimers" placeholder="Required disclaimers include..."></textarea></div>
+      <div class="question"><div class="question__number">30</div><label class="question__label">Can you use partner or client logos in marketing materials?</label><p class="question__hint">If so, which ones are approved? Are there usage restrictions?</p><textarea name="30_logo_usage" placeholder="Approved logos include..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Section 07</div><h2 class="section-title">Anything Else</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">31</div><label class="question__label">Is there anything I haven't asked that you think I should know?</label><p class="question__hint">Internal politics, past branding experiences, strong opinions from leadership, cultural context, upcoming changes — anything that would help me do better work for you.</p><textarea name="31_anything_else" class="tall" placeholder="You should also know that..."></textarea></div>
+    </div>
+    <div class="form-section" data-section><div class="section-number">Your Details</div><h2 class="section-title">Contact Information</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><label class="question__label">Name *</label><input type="text" name="contact_name" required placeholder="Your name"></div>
+      <div class="question"><label class="question__label">Email *</label><input type="email" name="contact_email" required placeholder="your@email.com"></div>
+      <div class="question"><label class="question__label">Organization</label><input type="text" name="contact_organization" placeholder="Company or organization name"></div>
+      <div class="question"><label class="question__label">Website</label><input type="url" name="contact_website" placeholder="https://..."></div>
+    </div>
+    <div class="submit-area">
+      <button type="submit" class="submit-btn"><span>Submit Questionnaire</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <p class="submit-note">Responses will be sent directly to Hannah Adams for review.</p>
+    </div>
+    <input type="hidden" name="_subject" value="New Brand Discovery Questionnaire Submission">
+    <input type="hidden" name="_next" value="">
+  </form>
+  <div class="success-message" id="successMessage">
+    <h2>Thank you.</h2>
+    <p>Your responses have been received. I'll review everything and follow up within a few business days to schedule our kickoff conversation.</p>
+  </div>
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Hannah Adams &middot; Creative Direction &middot; <a href="mailto:hannah@example.com">Get in touch</a></p>
+  </footer>
+</div>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const sections = document.querySelectorAll('.form-section[data-section]');
+  const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  sections.forEach(s => observer.observe(s));
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => { const scrollTop = window.scrollY; const docHeight = document.documentElement.scrollHeight - window.innerHeight; const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0; progressBar.style.width = progress + '%'; });
+  if (window.location.search.includes('success=true') || window.location.hash === '#success') { document.getElementById('brandForm').style.display = 'none'; document.getElementById('successMessage').classList.add('show'); document.querySelector('.header__subtitle').textContent = ''; document.querySelector('.header__note').textContent = ''; }
+  const nextField = document.querySelector('input[name="_next"]');
+  if (nextField) { nextField.value = window.location.origin + window.location.pathname + '?success=true'; }
+</script>
+</body>
+</html>
