@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Request Form — Hannah Adams</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #000000;
+    --surface: #0d0d0d;
+    --surface-hover: #151515;
+    --border: #222222;
+    --border-focus: #4a8eda;
+    --text: #f0eef5;
+    --text-muted: #b8b5c6;
+    --text-dim: #7d7a8e;
+    --accent: #4a8eda;
+    --accent-soft: rgba(74, 142, 218, 0.12);
+    --accent-glow: rgba(74, 142, 218, 0.25);
+    --serif: 'Raleway', -apple-system, sans-serif;
+    --sans: 'Raleway', -apple-system, sans-serif;
+    --radius: 8px;
+    --max-w: 960px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.65; min-height: 100vh; letter-spacing: 0.015em; }
+  body::before { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse 80% 60% at 20% 10%, rgba(74, 142, 218, 0.06), transparent 60%), radial-gradient(ellipse 60% 50% at 80% 90%, rgba(60, 120, 200, 0.04), transparent 50%); pointer-events: none; z-index: 0; }
+  .wrapper { position: relative; z-index: 1; max-width: var(--max-w); margin: 0 auto; padding: 4rem 1.5rem 6rem; }
+  .header { margin-bottom: 3.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--border); }
+  .header__eyebrow { font-family: var(--sans); font-size: 0.88rem; font-weight: 500; letter-spacing: 0.15em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem; opacity: 0; animation: fadeUp 0.6s ease forwards; }
+  .header__title { font-family: var(--serif); font-size: clamp(1.8rem, 4.5vw, 3.2rem); font-weight: 400; line-height: 1.15; color: var(--text); margin-bottom: 1rem; opacity: 0; animation: fadeUp 0.6s ease 0.1s forwards; white-space: nowrap; }
+  .header__subtitle { font-size: 1.05rem; font-weight: 400; color: var(--text); max-width: 600px; line-height: 1.7; opacity: 0; animation: fadeUp 0.6s ease 0.2s forwards; }
+  .header__note { margin-top: 1.5rem; font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; opacity: 0; animation: fadeUp 0.6s ease 0.3s forwards; }
+  .form-section { margin-bottom: 3rem; opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease, transform 0.5s ease; }
+  .form-section.visible { opacity: 1; transform: translateY(0); }
+  .section-title { font-family: var(--serif); font-size: 1.6rem; font-weight: 500; margin-bottom: 0.25rem; color: var(--accent); position: relative; }
+  .section-title::before { display: none; }
+  .section-number { font-family: var(--sans); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.25rem; }
+  .question { margin-bottom: 2rem; padding: 1.5rem; background: transparent; border: 1px solid var(--border); border-radius: var(--radius); transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+  .question:focus-within { border-color: var(--border-focus); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .question__label { display: block; font-size: 1.05rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; line-height: 1.5; }
+  .question__hint { font-size: 1.05rem; font-weight: 400; color: var(--text-muted); margin-bottom: 0.85rem; line-height: 1.65; }
+  .question__number { font-size: 0.75rem; font-weight: 600; color: var(--accent); letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+  .inline-note { font-size: 0.95rem; font-weight: 400; color: var(--text-muted); line-height: 1.65; padding: 1rem 1.5rem; border-left: 2px solid var(--accent); margin-bottom: 2rem; }
+  .inline-note a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(74, 142, 218, 0.3); transition: border-color 0.2s; }
+  .inline-note a:hover { border-bottom-color: var(--accent); }
+  textarea, input[type="text"], input[type="email"], input[type="url"] { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-family: var(--sans); font-size: 0.95rem; font-weight: 400; padding: 0.75rem 1rem; transition: border-color 0.2s ease, box-shadow 0.2s ease; line-height: 1.6; resize: vertical; }
+  textarea:focus, input[type="text"]:focus, input[type="email"]:focus, input[type="url"]:focus { outline: none; border-color: var(--border-focus); box-shadow: 0 0 0 2px var(--accent-soft); }
+  textarea::placeholder, input::placeholder { color: var(--text-dim); font-weight: 400; }
+  textarea { min-height: 100px; } textarea.tall { min-height: 140px; }
+  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+  .check-item { display: flex; align-items: center; gap: 0.6rem; padding: 0.5rem 0.65rem; border-radius: 6px; cursor: pointer; transition: background 0.2s ease; }
+  .check-item:hover { background: var(--surface-hover); }
+  .check-item input[type="checkbox"] { -webkit-appearance: none; appearance: none; width: 18px; height: 18px; border: 1.5px solid var(--border); border-radius: 4px; background: var(--bg); cursor: pointer; flex-shrink: 0; transition: all 0.2s ease; position: relative; }
+  .check-item input[type="checkbox"]:checked { background: var(--accent); border-color: var(--accent); }
+  .check-item input[type="checkbox"]:checked::after { content: ''; position: absolute; top: 2px; left: 5px; width: 5px; height: 9px; border: solid var(--bg); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .check-item span { font-size: 0.9rem; font-weight: 400; color: var(--text-muted); }
+  .progress-bar { position: fixed; top: 0; left: 0; height: 3px; background: var(--accent); z-index: 100; transition: width 0.3s ease; box-shadow: 0 0 8px var(--accent-glow); }
+  .submit-area { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; }
+  .submit-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: var(--accent); color: #fff; font-family: var(--sans); font-size: 0.9rem; font-weight: 500; letter-spacing: 0.03em; padding: 0.9rem 2.5rem; border: none; border-radius: var(--radius); cursor: pointer; transition: all 0.3s ease; position: relative; overflow: hidden; }
+  .submit-btn::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.3s ease; }
+  .submit-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 20px var(--accent-glow); }
+  .submit-btn:hover::before { opacity: 1; }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-note { margin-top: 1rem; font-size: 0.82rem; color: var(--text-dim); }
+  .success-message { display: none; text-align: center; padding: 4rem 2rem; }
+  .success-message.show { display: block; }
+  .success-message h2 { font-family: var(--serif); font-size: 2rem; color: var(--text); margin-bottom: 1rem; }
+  .success-message p { color: var(--text-muted); font-weight: 400; max-width: 400px; margin: 0 auto; }
+  .footer { margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.82rem; color: var(--text-dim); }
+  .footer a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+  .footer a:hover { color: var(--accent); }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 860px) { .wrapper { padding: 3rem 1.25rem 5rem; } }
+  @media (max-width: 600px) { .wrapper { padding: 2rem 1rem 3.5rem; } .header__title { font-size: 1.8rem; white-space: normal; } .checklist { grid-template-columns: 1fr; } .question { padding: 1.25rem; } .section-title { font-size: 1.35rem; } .submit-btn { width: 100%; justify-content: center; } }
+  @media (max-width: 380px) { .wrapper { padding: 1.5rem 0.75rem 3rem; } }
+</style>
+</head>
+<body>
+<div class="progress-bar" id="progressBar"></div>
+<div class="wrapper">
+  <header class="header">
+    <div class="header__eyebrow">Hannah Adams — Creative Direction</div>
+    <h1 class="header__title">Creative Request Form</h1>
+    <p class="header__subtitle">Use this form to submit a new creative project request. The more detail you can provide upfront, the faster and smoother the process will be.</p>
+    <p class="header__note">If a question doesn't apply, just skip it. I'll follow up with anything else I need.</p>
+  </header>
+  <form id="requestForm" action="https://formspree.io/f/xkovoakr" method="POST">
+    <!-- Section 1: Contact -->
+    <div class="form-section" data-section><div class="section-number">Section 01</div><h2 class="section-title">Contact</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><label class="question__label">Name *</label><input type="text" name="contact_name" required placeholder="Your name"></div>
+      <div class="question"><label class="question__label">Email *</label><input type="email" name="contact_email" required placeholder="your@email.com"></div>
+    </div>
+
+    <!-- Section 2: Timeline & Assets -->
+    <div class="form-section" data-section><div class="section-number">Section 02</div><h2 class="section-title">Timeline & Assets</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">01</div><label class="question__label">What is your deadline for deliverables?</label><p class="question__hint">Include a specific date if you have one, and note whether it's a hard deadline (event, launch, print date) or flexible.</p><input type="text" name="01_deadline" placeholder="e.g., March 15, 2026 — hard deadline for conference"></div>
+      <div class="question"><div class="question__number">02</div><label class="question__label">Will you provide the copy, images, and other assets — or do you need me to create them?</label><p class="question__hint">Content creation (copywriting, photography, illustration, etc.) may increase the project scope and cost.</p><textarea name="02_assets_provided" placeholder="I will provide... / I need help with..."></textarea></div>
+      <p class="inline-note">If this is a fast-turnaround project, feel free to note that in the open field at the end of this form.</p>
+    </div>
+
+    <!-- Section 3: Budget -->
+    <div class="form-section" data-section><div class="section-number">Section 03</div><h2 class="section-title">Budget</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">03</div><label class="question__label">What is your budget for this project?</label><p class="question__hint">A rough range is fine — it helps define scope and deliverables. If this is an internal request with no set budget, just say so.</p><textarea name="03_budget" placeholder="Our budget is approximately..."></textarea></div>
+    </div>
+
+    <!-- Section 4: Project Overview -->
+    <div class="form-section" data-section><div class="section-number">Section 04</div><h2 class="section-title">Project Overview</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">04</div><label class="question__label">Project or campaign name</label><p class="question__hint">If you have one — otherwise, a working title is fine.</p><input type="text" name="04_project_name" placeholder="e.g., Q2 Product Launch, Website Redesign"></div>
+      <div class="question"><div class="question__number">05</div><label class="question__label">What do you need?</label><p class="question__hint">Check all that apply.</p>
+        <div class="checklist">
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="logo"><span>Logo</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="brand_identity"><span>Brand identity</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="website"><span>Website</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="landing_page"><span>Landing page</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="presentation"><span>Presentation / deck</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="social_media"><span>Social media graphics</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="print"><span>Print materials</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="infographic"><span>Infographic</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="illustration"><span>Illustration</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="email_template"><span>Email template</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="icon_set"><span>Icon set</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="animation"><span>Animation / motion</span></label>
+          <label class="check-item"><input type="checkbox" name="05_deliverables[]" value="other"><span>Other</span></label>
+        </div>
+      </div>
+      <div class="question"><div class="question__number">06</div><label class="question__label">Describe the project.</label><p class="question__hint">What is it, what problem does it solve, and what's driving it? (Launch, event, campaign, rebrand, new initiative, etc.)</p><textarea name="06_project_description" class="tall" placeholder="This project is about..."></textarea></div>
+    </div>
+    <!-- Section 5: Existing Brand & Assets -->
+    <div class="form-section" data-section><div class="section-number">Section 05</div><h2 class="section-title">Existing Brand & Assets</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">07</div><label class="question__label">Do you have existing brand guidelines, logos, or assets?</label><p class="question__hint">If so, share a link or describe what you have. If not, just say so — we can work from scratch.</p><textarea name="07_existing_brand" placeholder="We have... / We don't have anything yet"></textarea></div>
+      <p class="inline-note">If you haven't already, consider filling out the <a href="https://hannahadamsdesign-spec.github.io/brandquestionnaire/" target="_blank">Brand Discovery Questionnaire</a> — it helps me understand your brand at a deeper level and will strengthen the creative work.</p>
+    </div>
+
+    <!-- Section 6: Creative Direction -->
+    <div class="form-section" data-section><div class="section-number">Section 06</div><h2 class="section-title">Creative Direction</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">08</div><label class="question__label">Share 2–3 examples of designs or brands you admire for this project.</label><p class="question__hint">Links, screenshots, or descriptions — whatever is easiest. Note what you like about them.</p><textarea name="08_references" class="tall" placeholder="Brands / designs I admire and why..."></textarea></div>
+    </div>
+
+    <!-- Section 7: Specs & Deliverables -->
+    <div class="form-section" data-section><div class="section-number">Section 07</div><h2 class="section-title">Specs & Deliverables</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">09</div><label class="question__label">What formats or sizes are needed?</label><p class="question__hint">e.g., 1080×1080 for Instagram, letter-size PDF, responsive web, specific print dimensions. If you're not sure, that's fine — I can advise.</p><textarea name="09_formats" placeholder="We need..."></textarea></div>
+      <div class="question"><div class="question__number">10</div><label class="question__label">Are there mandatory elements that must be included?</label><p class="question__hint">Specific logos, legal disclaimers, partner logos, QR codes, required copy, etc.</p><textarea name="10_mandatory" placeholder="Must-haves include..."></textarea></div>
+    </div>
+
+    <!-- Section 8: Approvals -->
+    <div class="form-section" data-section><div class="section-number">Section 08</div><h2 class="section-title">Approvals</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">11</div><label class="question__label">Who is the final decision-maker / approver?</label><p class="question__hint">Who has the final say on this project?</p><input type="text" name="11_approver" placeholder="Final approver is..."></div>
+      <div class="question"><div class="question__number">12</div><label class="question__label">Are there other stakeholders who need to review?</label><p class="question__hint">Anyone else who will weigh in on drafts or final deliverables?</p><textarea name="12_stakeholders" placeholder="Other reviewers include..."></textarea></div>
+      <div class="question"><div class="question__number">13</div><label class="question__label">Preferred way to receive drafts and give feedback?</label><p class="question__hint">Email, shared folder, live review call — whatever works best for your team.</p><input type="text" name="13_feedback_method" placeholder="e.g., Email with PDF, shared Dropbox folder, Zoom review"></div>
+    </div>
+
+    <!-- Section 9: Anything Else -->
+    <div class="form-section" data-section><div class="section-number">Section 09</div><h2 class="section-title">Anything Else</h2></div>
+    <div class="form-section" data-section>
+      <div class="question"><div class="question__number">14</div><label class="question__label">Is there anything else I should know?</label><p class="question__hint">Rush timelines, internal context, strong opinions, past experiences with similar projects — anything that helps.</p><textarea name="14_anything_else" class="tall" placeholder="You should also know that..."></textarea></div>
+    </div>
+
+    <div class="submit-area">
+      <button type="submit" class="submit-btn"><span>Submit Request</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg></button>
+      <p class="submit-note">Responses will be sent directly to Hannah Adams for review.</p>
+    </div>
+    <input type="hidden" name="_subject" value="New Creative Request Submission">
+    <input type="hidden" name="_next" value="">
+  </form>
+  <div class="success-message" id="successMessage">
+    <h2>Thank you.</h2>
+    <p>Your request has been received. I'll review everything and follow up shortly to discuss next steps.</p>
+  </div>
+  <footer class="footer">
+    <p>&copy; <span id="year"></span> Hannah Adams &middot; Creative Direction &middot; <a href="mailto:hannah.adams.design@gmail.com">Get in touch</a></p>
+  </footer>
+</div>
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  const sections = document.querySelectorAll('.form-section[data-section]');
+  const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); observer.unobserve(entry.target); } }); }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+  sections.forEach(s => observer.observe(s));
+  const progressBar = document.getElementById('progressBar');
+  window.addEventListener('scroll', () => { const scrollTop = window.scrollY; const docHeight = document.documentElement.scrollHeight - window.innerHeight; const progress = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0; progressBar.style.width = progress + '%'; });
+  if (window.location.search.includes('success=true') || window.location.hash === '#success') { document.getElementById('requestForm').style.display = 'none'; document.getElementById('successMessage').classList.add('show'); document.querySelector('.header__subtitle').textContent = ''; document.querySelector('.header__note').textContent = ''; }
+  const nextField = document.querySelector('input[name="_next"]');
+  if (nextField) { nextField.value = window.location.origin + window.location.pathname + '?success=true'; }
+</script>
+</body>
+</html>
